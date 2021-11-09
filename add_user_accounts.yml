@@ -1,0 +1,29 @@
+---
+- name: Converge
+  hosts: all
+  become: yes
+  gather_facts: yes
+
+  roles:
+    - role: robertdebock.users
+      users_group_list:
+        - name: robertdb
+          gid: 1024
+        - name: users
+        - name: notgroup
+          state: absent
+        - name: systemgroup
+          system: yes
+
+      users_user_list:
+        - name: root
+          cron_allow: yes
+        - name: robertdb
+          comment: Robert de Bock
+          uid: 1024
+          group: robertdb
+          groups: users
+          cron_allow: yes
+          sudo_options: "ALL=(ALL) NOPASSWD: ALL"
+          authorized_keys:
+            - "ssh-rsa ABC123"
